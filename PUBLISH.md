@@ -6,24 +6,16 @@ Prepared on 2026-11-13. Everything publishable is in this repository; the remain
 
 | Item | State |
 |---|---|
-| Git repository | Initialized, first commit `18ee7aa`, remote `origin` set to `github.com/mdwsk88/dsh-search-mix` |
+| Git repository | **Created and pushed**: [mdwsk88/dsh-search-mix](https://github.com/mdwsk88/dsh-search-mix), topics `dsh-plugin`, `dsh`, `deepseek-harness`, `web-search`, `search` |
 | npm package | `npm publish --dry-run` passes: 14 files, 22.7 kB, name `dsh-search-mix@0.1.0` free on npm |
 | Market entry (awesome-dsh-plugin) | [`market/awesome-dsh-plugin-entry.yml`](market/awesome-dsh-plugin-entry.yml), category `browser` |
 | Self-hosted format-1 index | [`market/index.json`](market/index.json), validated with the shipped `parseMarketIndex` |
 | Storefront icon | [`assets/icon-180.png`](assets/icon-180.png), 180×180 PNG |
 | Tests | 18/18: mix logic, config, provider output, client render |
 
-## 1. Create the GitHub repository
+## 1. GitHub repository — done
 
-Create a public `mdwsk88/dsh-search-mix`, then:
-
-```sh
-git push -u origin main
-```
-
-Add the **`dsh-plugin`** topic to the repository (Settings › Topics, or `gh repo edit --add-topic dsh-plugin`). The awesome list checks for it.
-
-The awesome list also requires the repository to be **at least one day old**, so its PR waits until tomorrow.
+The public repository is live at <https://github.com/mdwsk88/dsh-search-mix>, `main` is pushed, and the topics are set. The awesome list still requires the repository to be **at least one day old**, so its PR waits until 2026-11-14.
 
 ## 2. Publish to npm
 
