@@ -1,80 +1,78 @@
 # Publishing dsh-search-mix
 
-Everything a maintainer needs after the plugin works locally. Nothing here has been run yet: it publishes under the author's accounts.
+Prepared on 2026-11-13. Everything publishable is in this repository; the remaining steps need the author's GitHub and npm accounts.
 
-## 1. Before publishing
+## Ready in this repository
 
-- `package.json` points `repository`/`homepage`/`bugs` at `github.com/mdwsk88/dsh-search-mix`; create that repository first, or change the URLs.
-- `npm view dsh-search-mix` returned 404 on 2026-11-13, so the name is free. If it is taken later, scope it (`@mdwsk88/dsh-search-mix`) and update `dsh.bundle` users' install line.
-- `npm pack --dry-run` lists 13 files (index, src, patch, locales, docs, icon, license, README). Tests stay out of the tarball.
-- `engines.dsh` is `>=0.2.1-rc.1`; DSH evaluates it with prereleases included, so 0.2.2-rc.x passes.
-
-## 2. Publish the package
-
-```sh
-git init
-git add .
-git commit -m "dsh-search-mix 0.1.0"
-git remote add origin git@github.com:mdwsk88/dsh-search-mix.git
-git push -u origin main
-npm publish
-```
-
-Users then install it with:
-
-```sh
-dsh plugin --profile <profile> add dsh-search-mix
-```
-
-or from DSH's Plugins page / a market.
-
-## 3. List it in the markets
-
-| Market | How |
+| Item | State |
 |---|---|
-| **DSH Market** (`dshmarket`, the tab I installed) | Its catalog is the [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin) registry. Open a PR there with one entry (package name + repository); the site and the market pick it up automatically, usually within a day. |
-| **Open Plugin Market** (`dshopen.org`) | Submit through [polang233/dsh-plugin-index](https://github.com/polang233/dsh-plugin-index) or its site's submit form. |
-| **dshbase.com** | Directory site; its listing tracks GitHub/npm entries. |
-| **Official market** | DeepSeek announced on 2026-11-08 that an official plugin market and an author support program are being built. Nothing to submit to yet on 2026-11-13; watch the official account. |
+| Git repository | Initialized, first commit `18ee7aa`, remote `origin` set to `github.com/mdwsk88/dsh-search-mix` |
+| npm package | `npm publish --dry-run` passes: 14 files, 22.7 kB, name `dsh-search-mix@0.1.0` free on npm |
+| Market entry (awesome-dsh-plugin) | [`market/awesome-dsh-plugin-entry.yml`](market/awesome-dsh-plugin-entry.yml), category `browser` |
+| Self-hosted format-1 index | [`market/index.json`](market/index.json), validated with the shipped `parseMarketIndex` |
+| Storefront icon | [`assets/icon-180.png`](assets/icon-180.png), 180×180 PNG |
+| Tests | 18/18: mix logic, config, provider output, client render |
 
-## 4. Own index entry (optional)
+## 1. Create the GitHub repository
 
-If you host your own format-1 index (the official Discover tab, `plugins → Discover → Index sources`), a minimal entry looks like this:
+Create a public `mdwsk88/dsh-search-mix`, then:
 
-```json
-{
-  "format": 1,
-  "title": { "en": "My plugins", "zh": "我的插件" },
-  "plugins": [
-    {
-      "name": "dsh-search-mix",
-      "title": { "en": "Search Mix", "zh": "混合搜索" },
-      "description": {
-        "en": "Mixes two search APIs per web search.",
-        "zh": "每次联网搜索同时问两家搜索 API，按序交错合并并去重。"
-      },
-      "repository": { "url": "https://github.com/mdwsk88/dsh-search-mix" },
-      "versions": [
-        {
-          "version": "0.1.0",
-          "publishTimestamp": 1763020800,
-          "source": { "type": "npm" },
-          "engines": { "dsh": ">=0.2.1-rc.1" }
-        }
-      ]
-    }
-  ]
-}
+```sh
+git push -u origin main
 ```
 
-The generator in the DSH repository (`apps/plugin-market-generator`) can build this from a text list and fill npm metadata instead of hand-writing it.
+Add the **`dsh-plugin`** topic to the repository (Settings › Topics, or `gh repo edit --add-topic dsh-plugin`). The awesome list checks for it.
+
+The awesome list also requires the repository to be **at least one day old**, so its PR waits until tomorrow.
+
+## 2. Publish to npm
+
+```sh
+npm login          # or set NPM_TOKEN
+npm publish
+npm view dsh-search-mix version
+```
+
+After this, `dsh plugin --profile <profile> add dsh-search-mix` works immediately. Being on npm does **not** put it in a market yet: both markets read a curated catalog, not npm search.
+
+## 3. Submit to awesome-dsh-plugin (makes it searchable in dshmarket and Discover)
+
+The catalog is generated from one YAML file per plugin. After the repository is a day old:
+
+1. Fork [awesome-dsh-plugin](https://github.com/awesome-dsh-plugin/awesome-dsh-plugin).
+2. Copy [`market/awesome-dsh-plugin-entry.yml`](market/awesome-dsh-plugin-entry.yml) to `data/plugins/mdwsk88__dsh-search-mix.yml` (filename = `<owner>__<repo>.yml`).
+3. Open the PR. Do not edit the generated READMEs.
+
+The entry is already in the required shape:
+
+```yaml
+url: https://github.com/mdwsk88/dsh-search-mix
+name: mdwsk88/dsh-search-mix
+category: browser
+description:
+  en: Adds a web search provider that asks two or more search APIs at once ...
+  zh: 提供一个联网搜索提供方，同时询问两家或更多搜索 API ...
+icon: https://raw.githubusercontent.com/mdwsk88/dsh-search-mix/main/assets/icon-180.png
+```
+
+Every claim in the description is checked against the code, so keep it to what `README.md` documents. Once merged, dshmarket fetches the refreshed catalog on its next open (usually within a day), and the format-1 index published as `dsh-plugin-catalog` is regenerated from the same data.
+
+If a maintainer asks whether this duplicates an existing entry: it mixes several APIs per search, interleaving and deduplicating their pages, rather than switching or failing over to one API.
+
+## 4. Self-hosted index (optional, immediate)
+
+`market/index.json` is a complete format-1 index pointing at the npm package. Host it on any static HTTPS host — GitHub Pages, jsDelivr via a repo, object storage — and add the URL under **Plugins › Discover › Index sources**. It works only after step 2.
+
+Its one version entry uses `publishTimestamp` from 2026-11-13; regenerate the file after a later publish so the timestamp matches the npm release.
 
 ## 5. Release checklist
 
 - [ ] `npm test` passes (18 tests on 2026-11-13).
-- [ ] Installed into a clean profile; the row page opens under Plugins › Installed plugins › Search Mix › Configure; the provider is selected under Plugins › Built-in plugin settings › Web search and fetch › Web search provider.
+- [ ] Package installed from the published tarball into a clean profile (`dsh plugin add dsh-search-mix`).
+- [ ] The row page opens under Plugins › Installed plugins › Search Mix › Configure and saves.
+- [ ] The provider is selectable under Plugins › Built-in plugin settings › Web search and fetch › Web search provider.
 - [ ] One real query returns merged, deduplicated pages.
-- [ ] Icon and localized title/description render in the bundle row and the provider menu.
-- [ ] README and detail documents match the shipped behavior.
-- [ ] No secret value in the package, config example, or README; the setup variable is `SEARCH_MIX_SOURCES`, never a `DSH_`-prefixed name (DSH refuses those in `.env`).
+- [ ] Icon and localized title/description render in the bundle row, the row page and the provider menu.
+- [ ] No secret value in the package, config examples, or README; the setup variable is `SEARCH_MIX_SOURCES`, never a `DSH_`-prefixed name.
+- [ ] `dsh-plugin` topic present; repository at least a day old before the awesome PR.
 - [ ] Version bumped and changelog noted for every publish.
