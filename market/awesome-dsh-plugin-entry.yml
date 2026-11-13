@@ -1,0 +1,7 @@
+url: https://github.com/mdwsk88/dsh-search-mix
+name: mdwsk88/dsh-search-mix
+category: browser
+description:
+  en: Adds a web search provider that asks two or more search APIs at once (DeepSeek, You.com, Tavily, Brave, Exa, Firecrawl, Doubao, Yuanbao, SearXNG), interleaves their pages and keeps a page two sources found once. Configured from its Plugins page.
+  zh: 提供一个联网搜索提供方，同时询问两家或更多搜索 API（DeepSeek、You.com、Tavily、Brave、Exa、Firecrawl、豆包、元宝、SearXNG），按序交错合并页面并去重；可在插件页配置。
+icon: https://raw.githubusercontent.com/mdwsk88/dsh-search-mix/main/assets/icon-180.png

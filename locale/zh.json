@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "混合搜索",
+    "description": "每次联网搜索同时问两家搜索 API，按序交错合并页面并去重，扩大首屏覆盖。",
+    "detail": "docs/DETAIL.zh.md"
+  }
+}

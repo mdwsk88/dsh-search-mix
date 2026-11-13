@@ -1,0 +1,7 @@
+{
+  "meta": {
+    "title": "Search Mix",
+    "description": "Mixes two search APIs for every web search: asks them at once, interleaves their pages, and drops duplicates.",
+    "detail": "docs/DETAIL.md"
+  }
+}
